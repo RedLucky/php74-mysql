@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php74-mysql
+    ports:
+      - 80:80
+    volumes:
+      - "./src:/var/www/html/"
+      - "./conf/php:/usr/local/etc/php/"
+      - "./conf/apache:/etc/apache2/sites-enabled/"
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-server-80
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=shipping_track
+      - MYSQL_USER=shipping
+      - MYSQL_PASSWORD=shipping123
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - "3306:3306"
